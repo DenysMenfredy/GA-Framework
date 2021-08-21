@@ -6,6 +6,9 @@ from sqlalchemy.orm import Session
 from db import crud, models, schemas
 from db.database import SessionLocal, engine
 
+import core.algorithms as algorithms
+from core.algorithms.ga import GeneticAlgorithm
+
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -18,6 +21,15 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+@app.get("/exec")
+def execute_algorithm(params: dict):
+    print(params)
+    ag = GeneticAlgorithm(**params)
+    best_solution = ag.start()
+
+    return {"best fitness": best_solution.fitness}
 
 
 @app.post("/users/", response_model=schemas.User)

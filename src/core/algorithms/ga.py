@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from random import sample, randrange, random
-
+import core.problems as problems
+from core.problems.holder_table import HolderTable
 
 class GeneticAlgorithm():
     def __init__(self, **params):
@@ -9,32 +10,33 @@ class GeneticAlgorithm():
         self.num_generations = params["generations"]
         self.crossover_rate = params["crossover_rate"]
         self.mutation_rate = params["mutation_rate"]
+        self.crossover_method = params["crossover_method"]
         self.best_individual = None
-        self.agent = params["agent"]
-        self.agent_dimension = params["agent_dimension"]
+        self.problem = self.getProblem(params["problem"])
+        self.dimension = params["dimension"]
 
     def start(self):
         
-        self.resetData()
+        # self.resetData()
         population =  self.initialPop()
-        self.evalute(population)
+        self.evaluate(population)
         self.findBest(population)
-        self.saveData(population)
+        # self.saveData(population)
         for _ in range(self.num_generations):
               population = self.reproduce(population)
-              self.evalute(population)
+              self.evaluate(population)
               self.findBest(population)
-              self.saveData(population)
+            #   self.saveData(population)
 
-    
+        return self.best_individual
     
     def initialPop(self, ):
         """Generate a initial population"""
 
-        return [self.agent(dimension=self.agent_dimension) for _ in range(self.size_pop)]
+        return [self.problem(dimension=self.dimension) for _ in range(self.size_pop)]
     
     
-    def evalute(self, population):
+    def evaluate(self, population):
         """Evaluate each individual computing their fitness"""
         
         for individual in population:
@@ -53,9 +55,13 @@ class GeneticAlgorithm():
                 
         return new_pop + population[percentual: ]
 
-    def evalute(self, population):
-        pass
     
+    def getProblem(self, problem_name:str):
+        """Get the problem by name"""
+
+        if problem_name == 'HolderTable':
+            return HolderTable
+
     def crossover(self, mating_pool):
         """Mating individuals to generate offspring based in crossover rate"""
         
@@ -67,11 +73,36 @@ class GeneticAlgorithm():
         for _ in range(0, percentual, 2):
             indv1 = mating_pool[randrange(size)]
             indv2 = mating_pool[randrange(size)]
-            indv12, indv21 = self.twoPointCrossover(indv1.chromosome, indv2.chromosome)
-            new_pop.append(self.agent(dimension=self.agent_dimension, chromosome=indv12))
-            new_pop.append(self.agent(dimension=self.agent_dimension, chromosome=indv21))
+            indv12, indv21 = self.twoPointCrossover(indv1.chromosome, indv2.chromosome) \
+                             if self.crossover_method == "twoPoint"\
+                             else self.onePointCrossover(indv1.chromosome, indv2.chromosome)
+
+            new_pop.append(self.problem(dimension=self.dimension, chromosome=indv12))
+            new_pop.append(self.problem(dimension=self.dimension, chromosome=indv21))
             
         return new_pop
+
+
+    def onePointCrossover(self, chrm1, chrm2):
+        """One point crossover method"""
+        
+        cut_point1 = randrange(len(chrm1))
+        cut_point2 = cut_point1
+        
+        chrm12 = chrm1[ :cut_point1] + chrm2[cut_point1 :cut_point2] + chrm1[cut_point2: ]
+        chrm21 = chrm2[ :cut_point1] + chrm1[cut_point1 :cut_point2] + chrm2[cut_point2: ]
+        
+        return(chrm12, chrm21)
+    
+    def twoPointCrossover(self, chrm1, chrm2):
+        """Two point crossover method"""
+        cut_point1 = randrange(len(chrm1))
+        cut_point2 = cut_point1
+        
+        chrm12 = chrm1[ :cut_point1] + chrm2[cut_point1 :cut_point2] + chrm1[cut_point2: ]
+        chrm21 = chrm2[ :cut_point1] + chrm1[cut_point1 :cut_point2] + chrm1[cut_point2: ]
+        
+        return(chrm12, chrm21)
 
     def mutate(self, population):
         """Mutate the individuals based in mutation rate"""
@@ -99,7 +130,7 @@ class GeneticAlgorithm():
             
         return mating_pool
 
-    def bestIndividual(self, population):
+    def findBest(self, population):
         """Get the best individual of the population based on its fitness"""
         
         best = sorted(population, key = lambda indv: indv.fitness)[0]

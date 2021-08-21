@@ -34,7 +34,7 @@ class BaseIndividual(object):
         Create a copy of the individual.
         """
 
-        copy = Individual(self.dimension, self.chromosome)
+        copy = BaseIndividual(self.dimension, self.chromosome)
         copy.fitness = self.fitness
 
         return copy
