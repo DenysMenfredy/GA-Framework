@@ -7,7 +7,8 @@ from db import crud, models, schemas
 from db.database import SessionLocal, engine
 
 import core.algorithms as algorithms
-from core.algorithms.ga import GeneticAlgorithm
+from core.algorithms.ga import GA
+from core.problems.function import Sphere
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -23,11 +24,12 @@ def get_db():
         db.close()
 
 
-@app.get("/exec")
+@app.post("/exec")
 def execute_algorithm(params: dict):
     print(params)
-    ag = GeneticAlgorithm(**params)
-    best_solution = ag.start()
+    problem = Sphere()
+    ag = GA()
+    best_solution = ag.run(problem)
 
     return {"best fitness": best_solution.fitness}
 

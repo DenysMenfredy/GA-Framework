@@ -32,9 +32,9 @@ class Execution:
         seed(self.seed)
         problem = self.getProblem(self.id_problem)
         algorithm = self.getAlgorithm(self.id_algorithm)
-        user = self.getUser(self.id_user)
-        algorithm.run(problem)
+        solution = algorithm.run(problem)
         self.status = "FINISHED" # TODO: Status predefinidos pelo banco
         self.finished_at = datetime.now()
         self.save()
+        return solution
         

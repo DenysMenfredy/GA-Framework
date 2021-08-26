@@ -1,4 +1,5 @@
-
+from core.individual import Individual
+import numpy as np
 from .problem import Problem
 
 class Function(Problem):
@@ -25,3 +26,43 @@ class Function(Problem):
         self.lower_bound = lower_bound
         self.optimum = optimum
         self.maximization = maximization
+
+    def evaluate(self, *args):
+        """
+        Evaluates the function.
+
+        :param args: The arguments to the function.
+        :return: The result of the function.
+        """
+        raise NotImplementedError("Function.evaluate is not implemented")
+    
+    def getRandomSolution(self):
+        """
+        Gets a random solution.
+
+        :return: A random solution.
+        """
+        raise NotImplementedError("Function.getRandomSolution is not implemented")
+    
+
+
+class Sphere(Function):
+    """
+    A Sphere is a function that represents the function f(x) = x^2.
+    """
+    def __init__(self):
+        name = "Sphere"
+        description = "A Sphere is a function that represents the function f(x) = x^2."
+        minimum_dimension = 3
+        maximum_dimension = 256
+        upper_bound = 5.12
+        lower_bound = -5.12
+        optimum = 0
+        maximization = False
+        super().__init__(name, description, minimum_dimension, maximum_dimension, upper_bound, lower_bound, optimum, maximization)
+    
+    def evaluate(self, chromosome:np.ndarray):
+        return sum(chromosome**2)
+
+    def getRandomSolution(self, size:int=30): # TODO: Implement dimension in model
+        return Individual(np.random.uniform(self.lower_bound, self.upper_bound, size))

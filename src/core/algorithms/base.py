@@ -1,6 +1,7 @@
 
 from random import randrange, sample, random
-from src.core.problems.problem import Problem
+from core.problems.function import Function
+from core.problems.problem import Problem
 
 
 class BaseAlgorithm:
@@ -37,23 +38,24 @@ class BaseAlgorithm:
         """Evaluate each individual computing their fitness"""
         
         for individual in population:
-            individual.fitness = problem.evaluateSolution(individual.chromosome)
+            individual.fitness = problem.evaluate(individual.chromosome)
     
-    def reproduce(self, population, crossover_rate, mutation_rate, elitism):
+    def reproduce(self, population:list, problem:Function):
         """Reproduce the population using th genetic operators"""
         
-        mating_pool = self.select(population)
-        new_pop = self.crossover(mating_pool)
+        mating_pool = self.select(population, problem.maximization)
+        new_pop = self.crossover(mating_pool, problem)
         self.mutate(new_pop)
-        new_pop.sort(key = lambda indv: indv.fitness)
+        new_pop.sort(key = lambda indv: indv.fitness, reverse=problem.maximization)
         percentual = int(self.size_pop * self.crossover_rate)
         percentual = percentual if percentual % 2 == 0 else percentual + 1
-        population.sort(key = lambda indv: indv.fitness, reverse=True)
+        if self.elitism:
+            population.sort(key = lambda indv: indv.fitness, reverse=problem.maximization) # If elitism is enabled, worst individuals are removed, else best
                 
         return new_pop + population[percentual: ]
 
 
-    def crossover(self, mating_pool):
+    def crossover(self, mating_pool, problem:Function):
         """Mating individuals to generate offspring based in crossover rate"""
         
         new_pop = []
@@ -68,10 +70,18 @@ class BaseAlgorithm:
                              if self.crossover_method == "twoPoint"\
                              else self.onePointCrossover(indv1.chromosome, indv2.chromosome)
 
-            new_pop.append(self.problem(dimension=self.dimension, chromosome=indv12))
-            new_pop.append(self.problem(dimension=self.dimension, chromosome=indv21))
-            
+            idv = problem.getRandomSolution()
+            idv.chromosome = indv12
+            new_pop.append(idv)
+            idv = problem.getRandomSolution()
+            idv.chromosome = indv21
+            new_pop.append(idv)
+        
         return new_pop
+        #     new_pop.append(self.problem(dimension=self.dimension, chromosome=indv12))
+        #     new_pop.append(self.problem(dimension=self.dimension, chromosome=indv21))
+            
+        # return new_pop
 
 
     def onePointCrossover(self, chrm1, chrm2):
@@ -106,7 +116,7 @@ class BaseAlgorithm:
                 indiv.chromosome = indiv.chromosome[:n1] + [indiv.chromosome[n2]] + \
                 indiv.chromosome[n1+1:n2] + [indiv.chromosome[n1]] + indiv.chromosome[n2+1: ]
 
-    def select(self, population):
+    def select(self, population, maximization:bool):
         """Select parents to mating using tournament selection method"""
         
         mating_pool = []
@@ -116,21 +126,25 @@ class BaseAlgorithm:
         
         for _ in range(percentual):
             selecteds = sample(population, amount)
-            best = sorted(selecteds ,key = lambda indv: indv.fitness)[0]
+            best = sorted(selecteds ,key = lambda indv: indv.fitness, reverse=maximization)[0]
             mating_pool.append(best)
             
         return mating_pool
 
-    def findBest(self, population):
+    def findBest(self, population, maximization:bool):
         """Get the best individual of the population based on its fitness"""
         
-        best = sorted(population, key = lambda indv: indv.fitness)[0]
+        best = sorted(population, key = lambda indv: indv.fitness, reverse=maximization)[0]
          
         if not self.best_individual:
             self.best_individual = best.copy()
-            
-        if best.fitness < self.best_individual.fitness:
-            self.best_individual = best.copy()
+        
+        if maximization:
+            if best.fitness > self.best_individual.fitness:
+                self.best_individual = best.copy()
+        else:
+            if best.fitness < self.best_individual.fitness:
+                self.best_individual = best.copy()
 
     def plotGraphics(self):
         pass
