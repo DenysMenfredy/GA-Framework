@@ -1,3 +1,4 @@
+from uuid import uuid4
 from sqlalchemy.orm import Session
 
 from . import models, schemas
@@ -23,7 +24,29 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.refresh(db_user)
     return db_user
 
+def create_problem(db: Session, problem: schemas.ProblemBase):
+    # problem_id = uuid4()
+    # print(problem_id)
+    db_problem = models.Problem(name=problem.name, description=problem.description)
+    db.add(db_problem)
+    db.commit()
+    db.refresh(db_problem)
+    return db_problem
 
+def get_problems(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Problem).offset(skip).limit(limit).all()
+
+
+def create_algorithm(db: Session, algorithm: schemas.AlgorithmBase):
+    db_algorithm = models.Algorithm(name=algorithm.name, shortName=algorithm.shortName, description=algorithm.description)
+    db.add(db_algorithm)
+    db.commit()
+    db.refresh(db_algorithm)
+    return db_algorithm
+
+def get_algorithms(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Algorithm).offset(skip).limit(limit).all()
+    
 def get_items(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Item).offset(skip).limit(limit).all()
 

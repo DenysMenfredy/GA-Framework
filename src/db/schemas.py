@@ -1,6 +1,8 @@
 from typing import List, Optional
+from uuid import uuid4
 
 from pydantic import BaseModel
+from pydantic.types import UUID4
 
 
 class ItemBase(BaseModel):
@@ -38,3 +40,15 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class ProblemBase(BaseModel):
+    id: Optional[UUID4]
+    name: str
+    description: str
+
+class AlgorithmBase(BaseModel):
+    id: Optional[UUID4]
+    name: str
+    shortName: str
+    description: str

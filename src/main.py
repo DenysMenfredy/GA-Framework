@@ -1,4 +1,5 @@
 from typing import List
+from uuid import uuid4
 
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
@@ -32,6 +33,29 @@ def execute_algorithm(params: dict):
     best_solution = ag.run(problem)
 
     return {"best fitness": best_solution.fitness}
+
+@app.post("/problem")
+def create_problem(problem: schemas.ProblemBase, db: Session = Depends(get_db)):
+    problem.id = uuid4()
+    return crud.create_problem(db, problem)
+
+@app.post("/algorithm")
+def create_algorithm(algorithm: schemas.AlgorithmBase, db: Session = Depends(get_db)):
+    algorithm.id = uuid4()
+    return crud.create_algorithm(db, algorithm)
+
+@app.get("/algorithms")
+def get_algorithms(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return crud.get_algorithms(db, skip=skip, limit=limit)
+
+@app.get("/problems")
+
+@app.post("/execution")
+
+@app.get("/problems/")
+def get_problems(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    problems = crud.get_problems(db, skip=skip, limit=limit)
+    return problems
 
 
 @app.post("/users/", response_model=schemas.User)
