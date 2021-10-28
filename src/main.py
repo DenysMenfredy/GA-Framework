@@ -11,7 +11,7 @@ import core.algorithms as algorithms
 from core.algorithms.ga import GA
 from core.problems.function import Sphere
 
-models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -41,7 +41,7 @@ def create_problem(problem: schemas.ProblemBase, db: Session = Depends(get_db)):
 
 @app.post("/algorithm")
 def create_algorithm(algorithm: schemas.AlgorithmBase, db: Session = Depends(get_db)):
-    algorithm.id = uuid4()
+    algorithm.algorithm_id = uuid4()
     return crud.create_algorithm(db, algorithm)
 
 @app.get("/algorithms")

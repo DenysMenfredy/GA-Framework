@@ -38,7 +38,7 @@ def get_problems(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_algorithm(db: Session, algorithm: schemas.AlgorithmBase):
-    db_algorithm = models.Algorithm(name=algorithm.name, shortName=algorithm.shortName, description=algorithm.description)
+    db_algorithm = models.Algorithm(algorithm_id = algorithm.algorithm_id, algorithm_name=algorithm.algorithm_name, short_name=algorithm.short_name, description=algorithm.description)
     db.add(db_algorithm)
     db.commit()
     db.refresh(db_algorithm)

@@ -1,8 +1,9 @@
 # coding: utf-8
 from sqlalchemy import Column, Float, ForeignKey, Integer, String, TIMESTAMP, Table, Text, text, Boolean
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.mysql import TINYINT
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
+from uuid import uuid4
 
 Base = declarative_base()
 metadata = Base.metadata
@@ -11,9 +12,9 @@ metadata = Base.metadata
 class Algorithm(Base):
     __tablename__ = 'algorithm'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(64), nullable=False)
-    shortName = Column(String(16))
+    algorithm_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    algorithm_name = Column(String(64), nullable=False)
+    short_name = Column(String(16))
     description = Column(Text, nullable=False)
 
 
@@ -87,7 +88,7 @@ class Execution(Base):
 
     id = Column(Integer, primary_key=True)
     User_id = Column(ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
-    Algorithm_id = Column(ForeignKey('algorithm.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
+    Algorithm_id = Column(ForeignKey('algorithm.algorithm_id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
     Status_id = Column(ForeignKey('status.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
     Problem_id = Column(ForeignKey('problem.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
     seed = Column(Float(asdecimal=True), nullable=False)

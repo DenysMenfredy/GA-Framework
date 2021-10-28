@@ -48,7 +48,7 @@ class ProblemBase(BaseModel):
     description: str
 
 class AlgorithmBase(BaseModel):
-    id: Optional[UUID4]
-    name: str
-    shortName: str
+    algorithm_id: Optional[UUID4]
+    algorithm_name: str
+    short_name: str
     description: str
