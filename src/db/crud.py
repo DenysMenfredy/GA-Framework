@@ -27,7 +27,7 @@ def create_user(db: Session, user: schemas.UserCreate):
 def create_problem(db: Session, problem: schemas.ProblemBase):
     # problem_id = uuid4()
     # print(problem_id)
-    db_problem = models.Problem(name=problem.name, description=problem.description)
+    db_problem = models.Problem(problem_name=problem.problem_name, description=problem.description)
     db.add(db_problem)
     db.commit()
     db.refresh(db_problem)

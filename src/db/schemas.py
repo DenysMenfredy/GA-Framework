@@ -23,9 +23,13 @@ class Item(ItemBase):
 
 
 class UserBase(BaseModel):
-    login: str
-    name: str
-    notification_email: str
+    user_id: UUID4
+    username: str
+    password: str
+    first_name: str
+    last_name: str
+    email: str
+    company: Optional[str]
 
 
 class UserCreate(UserBase):
@@ -34,7 +38,7 @@ class UserCreate(UserBase):
 
 
 class User(UserBase):
-    id: int
+    user_id: int
     # is_active: bool
     items: List[Item] = []
 
@@ -43,8 +47,8 @@ class User(UserBase):
 
 
 class ProblemBase(BaseModel):
-    id: Optional[UUID4]
-    name: str
+    problem_id: Optional[UUID4]
+    problem_name: str
     description: str
 
 class AlgorithmBase(BaseModel):

@@ -11,7 +11,7 @@ import core.algorithms as algorithms
 from core.algorithms.ga import GA
 from core.problems.function import Sphere
 
-# models.Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
