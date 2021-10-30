@@ -67,6 +67,33 @@ class Selection(Base):
     selection_name = Column(String(32), nullable=False)
     description = Column(Text, nullable=False)
 
+class Parameter(Base):
+    __tablename__ = 'parameter'
+
+    parameter_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    parameter_name = Column(String(32), nullable=False)
+    description = Column(Text, nullable=False)
+
+
+class Crossover(Base):
+    __tablename__ = 'crossover'
+
+    crossover_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    crossover_rate = Column(Float, nullable=False)
+
+    parameter_id = Column(ForeignKey('parameter.parameter_id', ondelete='CASCADE', \
+                          onupdate='CASCADE'), index=True)
+
+class Mutation(Base):
+    __tablename__ = 'mutation'
+
+    mutation_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    mutation_rate = Column(Float, nullable=False)
+
+    parameter_id = Column(ForeignKey('parameter.parameter_id', ondelete='CASCADE', \
+                          onupdate='CASCADE'), index=True)
+    
+
 
 class Status(Base):
     __tablename__ = 'status'
@@ -84,7 +111,7 @@ class User(Base):
     first_name = Column(String(64), nullable=False)
     last_name = Column(String(64), nullable=False)
     password = Column(String(64), nullable=False)
-    notification_email = Column(String(64), nullable=False)
+    email = Column(String(64), nullable=False, unique=True)
     company = Column(String(64), nullable=True)
 
 
@@ -100,12 +127,12 @@ class Execution(Base):
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     finished_at = Column(TIMESTAMP)
     selection_id = Column(ForeignKey('selection.selection_id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
-    mutation_id = Column(ForeignKey('operator.mutation_id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
-    crossover_id = Column(ForeignKey('operator.crossover_id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
+    mutation_id = Column(ForeignKey('mutation.mutation_id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
+    crossover_id = Column(ForeignKey('crossover.crossover_id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
     #TODO: fix execution has operators, many to many relationship
     Algorithm = relationship('Algorithm')
-    Crossover = relationship('Operator', primaryjoin='Execution.crossover_id == Operator.operator_id')
-    Mutation = relationship('Operator', primaryjoin='Execution.mutation_id == Operator.operator_id')
+    Crossover = relationship('Crossover', primaryjoin='Execution.crossover_id == Crossover.crossover_id')
+    Mutation = relationship('Mutation', primaryjoin='Execution.mutation_id == Mutation.mutation_id')
     Problem = relationship('Problem')
     Selection = relationship('Selection')
     Status = relationship('Status')
