@@ -14,6 +14,13 @@ from routers.users import router as users_router
 from routers.problems import router as problems_router
 from routers.algorithms import router as algorithms_router
 from routers.parameters import router as parameters_router
+from routers.status import router as status_router
+from routers.selections import router as selections_router
+from routers.operators import router as operators_router
+from routers.mutations import router as mutations_router
+from routers.crossovers import router as crossovers_router
+from routers.functions import router as functions_router
+
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -23,7 +30,12 @@ app.include_router(users_router)
 app.include_router(problems_router)
 app.include_router(algorithms_router)
 app.include_router(parameters_router)
-
+app.include_router(status_router)
+app.include_router(selections_router)
+app.include_router(operators_router)
+app.include_router(mutations_router)
+app.include_router(crossovers_router)
+app.include_router(functions_router)
 
 # Dependency
 def get_db():
