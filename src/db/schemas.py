@@ -28,7 +28,7 @@ class ProblemBase(BaseModel):
         orm_mode = True
 
 class Function(BaseModel):
-    function_id = UUID4
+    function_id: Optional[UUID4]
     minimum_dimension: int
     maximum_dimension: int
     upper_bound: float
@@ -36,16 +36,16 @@ class Function(BaseModel):
     optimum: float
     maximization: bool
 
-    class Config:
-        orm_mode = True
-
 class FunctionCreate(Function):
     problem_id: UUID4
     
     class Config:
         orm_mode = True
 
-class FunctionGet(Function, ProblemBase):
+class FunctionGet(Function):
+    problem_id: UUID4
+    problem_name: str
+    description: str
 
     class Config:
         orm_mode = True

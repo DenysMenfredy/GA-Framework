@@ -4,6 +4,8 @@ from pydantic.types import UUID4
 from . import models, schemas
 
 
+#TODO: Implement all CRUD operations for the tables
+
 def get_user_by_id(db: Session, user_id: UUID4):
     return db.query(models.User).filter(models.User.user_id == user_id).first()
 
@@ -68,7 +70,7 @@ def get_function_by_id(db: Session, function_id: UUID4):
               join(models.Problem).\
               filter(models.Function.function_id == function_id).first()
 
-def create_function(db: Session, function: schemas.Function):
+def create_function(db: Session, function: schemas.FunctionCreate):
     db_function = models.Function(function_id = function.function_id, \
                                   problem_id = function.problem_id, \
                                   maximum_dimension=function.maximum_dimension, \

@@ -47,11 +47,12 @@ class Problem(Base):
     description = Column(Text, nullable=False)
 
 
-class Function(Problem):
+class Function(Base):
     __tablename__ = 'function'
 
     function_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    problem_id = Column(ForeignKey('problem.problem_id', ondelete='CASCADE', onupdate='CASCADE'), primary_key=True, index=True)
+    problem_id = Column(ForeignKey('problem.problem_id', ondelete='CASCADE',\
+                        onupdate='CASCADE'), primary_key=True, index=True)
     minimum_dimension = Column(Integer, nullable=False)
     maximum_dimension = Column(Integer, nullable=False)
     upper_bound = Column(Float, nullable=False)

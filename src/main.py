@@ -10,6 +10,7 @@ from db.database import SessionLocal, engine
 import core.algorithms as algorithms
 from core.algorithms.ga import GA
 from core.problems.function import Sphere
+
 from routers.users import router as users_router
 from routers.problems import router as problems_router
 from routers.algorithms import router as algorithms_router
