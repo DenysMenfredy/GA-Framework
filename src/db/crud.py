@@ -189,3 +189,28 @@ def create_mutation(db: Session, mutation: schemas.Mutation):
     db.commit()
     db.refresh(db_mutation)
     return db_mutation
+
+
+def create_execution(db: Session, execution: schemas.Execution):
+    db_execution = models.Execution(execution_id=execution.execution_id, \
+                                    algorithm_id=execution.algorithm_id, \
+                                    problem_id=execution.problem_id, \
+                                    user_id=execution.user_id, \
+                                    status_id=execution.status_id, \
+                                    selection_id=execution.selection_id, \
+                                    crossover_id=execution.crossover_id, \
+                                    mutation_id=execution.mutation_id, \
+                                    seed=execution.seed)
+    db.add(db_execution)
+    db.commit()
+    db.refresh(db_execution)
+    return db_execution
+
+def get_executions(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Execution).offset(skip).limit(limit).all()
+
+
+def get_execution(db: Session, execution_id: UUID4):
+    return db.query(models.Execution).filter(models.Execution.execution_id == execution_id)\
+             .first()
+                                        

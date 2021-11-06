@@ -1,12 +1,13 @@
-from typing import List, Optional
-from uuid import uuid4
-from pydantic.types import UUID4
+from typing import Optional
+from pydantic.types import UUID4 
 
 from pydantic import BaseModel
+from datetime import datetime
+
 
 
 class UserBase(BaseModel):
-    user_id: UUID4 = uuid4()
+    user_id: Optional[UUID4]
     username: str
     password: str
     first_name: str
@@ -20,7 +21,7 @@ class User(UserBase):
         orm_mode = True
 
 class ProblemBase(BaseModel):
-    problem_id: UUID4 = uuid4()
+    problem_id: Optional[UUID4]
     problem_name: str
     description: str
 
@@ -118,6 +119,24 @@ class MutationGet(Mutation):
 class CrossoverGet(Crossover):
     parameter_name: str
     description: str
+
+    class Config:
+        orm_mode = True
+
+
+class Execution(BaseModel):
+    execution_id: Optional[UUID4]
+    problem_id: UUID4
+    algorithm_id: UUID4
+    user_id: UUID4
+    status_id: UUID4
+    selection_id: UUID4
+    crossover_id: UUID4
+    mutation_id: UUID4
+    execution_time: Optional[float]
+    seed: float
+    created_at: Optional[datetime]
+    finished_at: Optional[datetime]
 
     class Config:
         orm_mode = True

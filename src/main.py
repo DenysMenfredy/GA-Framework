@@ -21,7 +21,7 @@ from routers.operators import router as operators_router
 from routers.mutations import router as mutations_router
 from routers.crossovers import router as crossovers_router
 from routers.functions import router as functions_router
-
+from routers.executions import router as executions_router
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -37,6 +37,8 @@ app.include_router(operators_router)
 app.include_router(mutations_router)
 app.include_router(crossovers_router)
 app.include_router(functions_router)
+app.include_router(executions_router)
+
 
 # Dependency
 def get_db():

@@ -121,7 +121,7 @@ class Execution(Base):
 
     execution_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     user_id = Column(ForeignKey('user.user_id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
-    Algorithm_id = Column(ForeignKey('algorithm.algorithm_id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
+    algorithm_id = Column(ForeignKey('algorithm.algorithm_id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
     status_id = Column(ForeignKey('status.status_id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
     problem_id = Column(ForeignKey('problem.problem_id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
     seed = Column(Float(asdecimal=True), nullable=False)
