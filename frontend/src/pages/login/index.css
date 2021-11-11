@@ -35,15 +35,16 @@
 
 .login-text h2 {
     font-size: 2.2rem;
-    font-weight: 500;
+    font-weight: bold;
     color: black;
     opacity: 0.8;
     margin-bottom: 10px;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .login-text p {
     font-size: 1.2rem;
-    font-weight: 300;
+    font-weight: 400;
     color: black;
     opacity: 0.8;
 }

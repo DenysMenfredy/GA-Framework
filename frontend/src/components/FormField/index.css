@@ -1,0 +1,23 @@
+
+
+div {
+    width: 350px;
+    height: 55px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;    
+}
+
+input {
+    border-width: 0;
+    color: #E5E5E5;
+}
+
+input:focus {
+    outline: 0;
+    box-shadow: 0
+}
+
+input::placeholder {
+    color: transparent;
+}

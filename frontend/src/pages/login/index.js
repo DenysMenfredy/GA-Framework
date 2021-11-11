@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
+import FormField from '../../components/FormField';
+import FormButton from '../../components/FormButton';
+
 import './index.css';
 
 function Login() {
@@ -20,31 +23,35 @@ function Login() {
                 </div>
                 <div className="login-form">
                     <form>
-                        <div className="form-group">
-                            <label htmlFor="exampleInputEmail1">Email address</label>
-                            <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
+                            <FormField
+                                label="Email"
+                                type="email"
+                                name="email"
+                                onChange={() => { }}
+                                value=""
+                            />
+                            <FormField
+                                label="Password"
+                                type="password"
+                                name="password"
+                                onChange={() => { }}
+                                value=""
+                            />
+                        
+                        <div className="form-check">
+                            <label htmlFor="remember-check">Remember me</label>
+                            <input type="checkbox" id="remember-check" />
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="exampleInputPassword1">Password</label>
-                            <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
-                        </div>
-                        <div className="form-group">
-                            <div className="form-check">
-                                <label htmlFor="remember-check">Remember me</label>
-                                <input type="checkbox" id="remember-check" />
-                            </div>
                             <Link className="link" to="/passwordRecovery">Forgot password?</Link>
-                        </div>
-                        <div className="form-group">
-                            <button type="submit" className="login-btn">Login</button>
-                        </div>
+                        <FormButton 
+                            text="Login"
+                        />
                     </form>
                     <div className="register-opt">
                         <p>Don't have an account? <Link className="link" to="/register">Register</Link></p>
                     </div>
                 </div>
             </div>
-
         </section>
     )
 }
