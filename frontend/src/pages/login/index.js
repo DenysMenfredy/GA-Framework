@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import FormField from '../../components/FormField';
 import FormButton from '../../components/FormButton';
 
 import './index.css';
 
+import google from '../../assets/google-logo.png';
+
 function Login() {
+
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+
     return (
         <section className="login-container">
             <div className="left-side">
@@ -18,31 +24,35 @@ function Login() {
                     <p>Welcome back! login with your data that you entered during registration.</p>
                 </div>
                 <div className="google-login">
+                    <img src={google} alt="google logo" />
                     <h4>Login with Google</h4>
                     {/* <p>or</p> */}
                 </div>
+                <h5>or</h5>
                 <div className="login-form">
                     <form>
                             <FormField
                                 label="Email"
                                 type="email"
                                 name="email"
-                                onChange={() => { }}
-                                value=""
+                                onChange={(e) => { setEmail(e.target.value) }}
+                                value={email}
                             />
                             <FormField
                                 label="Password"
                                 type="password"
                                 name="password"
-                                onChange={() => { }}
-                                value=""
+                                onChange={(e) => {setPassword(e.target.value)}}
+                                value={password}
                             />
                         
                         <div className="form-check">
-                            <label htmlFor="remember-check">Remember me</label>
-                            <input type="checkbox" id="remember-check" />
-                        </div>
+                            <div className="form-check-input">
+                                <input type="checkbox" id="remember-check" />
+                                <label htmlFor="remember-check">Remember me</label>
+                            </div>
                             <Link className="link" to="/passwordRecovery">Forgot password?</Link>
+                        </div>
                         <FormButton 
                             text="Login"
                         />
