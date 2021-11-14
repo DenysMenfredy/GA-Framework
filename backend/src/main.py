@@ -53,6 +53,15 @@ def get_db():
 def hello_world():
     return {"message": "Hello World"}
 
+@app.post("/login")
+def login(login: schemas.Login, db: Session = Depends(get_db)):
+    user = crud.user_login(db, login)
+    if not user:
+        raise HTTPException(status_code=400, detail="Incorrect email or password.")
+    
+    return {"message": "Logged in successfully.", "user": user}
+    
+
 
 
 

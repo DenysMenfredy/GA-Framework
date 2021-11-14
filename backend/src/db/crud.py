@@ -12,6 +12,13 @@ def get_user_by_id(db: Session, user_id: UUID4):
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
+def user_login(db: Session, login_request: schemas.Login):
+    user = db.query(models.User).filter(models.User.username==login_request.username).first()
+    if user:
+        if user.password == login_request.password:
+            return user
+    return None
+
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
